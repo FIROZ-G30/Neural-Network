@@ -125,5 +125,57 @@ namespace NeuralNetworkBackPropegation
                 }
             }
         }
+
+        public double[][] GetWeightMatrix(WeightMatrix type)
+        {
+            if (type == WeightMatrix.InputHidden)
+            {
+                double[][] inputHiddenWeightMat = new double[numHidden][];
+                for (int i = 0; i < numHidden; i++)
+                {
+                    inputHiddenWeightMat[i] = new double[numInput + 1]; // numinput + bias
+                }
+
+                for (int i = 0; i < numHidden; i++)
+                {
+                    inputHiddenWeightMat[i][0] = hiddenBiases[i]; // seperate hidden bias vector
+
+                    for (int j = 1; j < numInput + 1; j++)
+                    {
+                         inputHiddenWeightMat[i][j] = inputHiddenWeights[i][j - 1];  // seperate input-hidden weight matrix
+                    }
+                }
+
+                return inputHiddenWeightMat;
+            }
+            else if (type == WeightMatrix.HiddenOutput)
+            {
+                double[][] hiddenOutputWeightMat = new double[numOutput][];
+                for (int i = 0; i < numOutput; i++)
+                {
+                    hiddenOutputWeightMat[i] = new double[numHidden + 1];   // numhidden + bias  
+                }
+
+                for (int i = 0; i < numOutput; i++)
+                {
+                    hiddenOutputWeightMat[i][0] = outputBiases[i];  // seperate output bias vector
+
+                    for (int j = 1; j < numHidden + 1; j++)
+                    {
+                         hiddenOutputWeightMat[i][j] = hiddenOutputWeights[i][j - 1];    // seperate hidden-output weight matrix
+                    }
+                }
+
+                return hiddenOutputWeightMat;
+            }
+            else
+            {
+                double[][] emptymatrix = new double[1][];
+                emptymatrix[0] = new double[1];
+                emptymatrix[0][0] = 0;
+
+                return emptymatrix;
+            }
+        }
     }
 }
