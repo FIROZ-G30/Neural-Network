@@ -240,7 +240,7 @@ namespace NeuralNetworkBackPropegation
             double[] hiddenSums = new double[numHidden]; // hidden nodes sums scratch array
             double[] outputSums = new double[numOutput]; // output nodes sums
 
-            for (int i = 0; i < numHidden; ++i) 
+            for (int i = 0; i < numHidden; ++i)
             {
                 hiddenSums[i] += this.hiddenBiases[i];  // add biases to hidden sums
 
@@ -255,7 +255,7 @@ namespace NeuralNetworkBackPropegation
                 this.hiddenOutputs[i] = Sigmoid(hiddenSums[i]);
             }
 
-            for (int i = 0; i < numOutput; ++i) 
+            for (int i = 0; i < numOutput; ++i)
             {
                 outputSums[i] += outputBiases[i];   // add biases to output sums
 
@@ -266,7 +266,103 @@ namespace NeuralNetworkBackPropegation
             }
 
             return Softmax(outputSums); // softmax all outputs to support classification
-        } 
+        }
+
+        #endregion
+
+        #region Mean Squared Error
+
+        public double MeanSquaredError(double[][] trainingData)
+        {
+            // average squared error per training item
+            double sumSquaredError = 0.0;
+            double[] input = new double[numInput]; // first numInput values in trainData
+            double[] desiredOutput = new double[numOutput]; // last numOutput values
+            double[] actualOutput;
+
+            for (int i = 0; i < trainingData.Length; i++)
+            {
+                Array.Copy(trainingData[i], input, numInput);   // get input values
+                Array.Copy(trainingData[i], numInput, desiredOutput, 0, numOutput); // get target values
+
+                actualOutput = ComputeOutput(input);   // get output for current weight matrix
+
+                for (int j = 0; j < numOutput; j++)
+                {
+                    double error = desiredOutput[j] - actualOutput[j];
+                    sumSquaredError += error * error;
+                }
+            }
+
+            return sumSquaredError / trainingData.Length;
+        }
+
+        #endregion
+
+        #region Get Accuracy
+
+        public double Accuracy(double[][] testData)
+        {
+            int correctTestCases = 0;
+            int incorrectTestCases = 0;
+            int desiredIndex = 0;
+            int actualIndex = 0;
+
+            double[] input = new double[numInput]; // first numInput values in trainData
+            double[] desiredOutput = new double[numOutput]; // last numOutput values
+            double[] actualOutput;
+
+            for (int i = 0; i < testData.Length; i++)
+            {
+                Array.Copy(testData[i], input, numInput);   // get input values
+                Array.Copy(testData[i], numInput, desiredOutput, 0, numOutput); // get target values
+
+                actualOutput = ComputeOutput(input);   // get output for current weight matrix
+
+                desiredIndex = MaxIndex(desiredOutput);
+                actualIndex = MaxIndex(actualOutput);
+
+                if (desiredIndex == actualIndex)
+                {
+                    correctTestCases++;
+                }
+                else
+                {
+                    incorrectTestCases++;
+                }
+
+            }
+
+            if ((correctTestCases + incorrectTestCases) != 0)
+            {
+                return correctTestCases / (correctTestCases + incorrectTestCases);
+            }
+            else
+            {
+                throw new Exception("Test cases calculation failed");
+            }
+        }
+
+        #endregion
+
+        #region Max Index
+
+        private static int MaxIndex(double[] vector)
+        {
+            int maxIndex = 0;
+            double maxValue = vector[0];
+
+            for (int i = 1; i < vector.Length; i++)
+            {
+                if (maxValue < vector[i])
+                {
+                    maxValue = vector[i];
+                    maxIndex = i;
+                }
+            }
+
+            return maxIndex;
+        }
 
         #endregion
     }
