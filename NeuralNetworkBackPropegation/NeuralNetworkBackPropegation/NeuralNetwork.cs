@@ -267,7 +267,7 @@ namespace NeuralNetworkBackPropegation
                 }
             }
 
-            return sumSquaredError / trainingData.Length;
+            return sumSquaredError / (trainingData.Length * 2); // devide by 2 to cancel out derivative coefficient
         }
 
         #endregion
