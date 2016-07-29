@@ -14,19 +14,16 @@ namespace NeuralNetworkBackPropegation
         private int numHidden;
         private int numOutput;
 
-        //private double[] inputs;    // input vector
         private double[][] inputHiddenWeights; // input-hidden weight matrix
         private double[] hiddenBiases;  // bias vector of the hidden layer
         private double[] hiddenOutputs; //output vector of the hidden layer
 
         private double[][] hiddenOutputWeights; // hidden-output weight matrix
         private double[] outputBiases;  // bias vector of the output layer
-        //private double[] outputs;   // output vector
 
         private Random rnd;
 
         #endregion
-
 
         #region Constructor
 
@@ -36,9 +33,7 @@ namespace NeuralNetworkBackPropegation
             this.numHidden = numHidden;
             this.numOutput = numOutput;
 
-            //this.inputs = new double[numInput];
             this.hiddenOutputs = new double[numHidden];
-            //this.outputs = new double[numOutput];
 
             this.hiddenBiases = new double[numHidden];
             this.outputBiases = new double[numOutput];
