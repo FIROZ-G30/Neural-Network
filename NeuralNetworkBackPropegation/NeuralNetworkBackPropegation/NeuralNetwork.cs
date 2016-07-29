@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetworkBackPropegation
 {
-    class NeuralNetwork
+    public partial class NeuralNetwork
     {
         #region Private Variables
 
