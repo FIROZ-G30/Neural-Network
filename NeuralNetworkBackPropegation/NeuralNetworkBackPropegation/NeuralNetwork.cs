@@ -91,7 +91,7 @@ namespace NeuralNetworkBackPropegation
             {
                 for (int j = 0; j < numInput + 1; j++)
                 {
-                    inputHiddenWeightMat[i][j] = rnd.NextDouble();
+                    inputHiddenWeightMat[i][j] = RandomDouble(6);
                 }
             }
 
@@ -99,12 +99,22 @@ namespace NeuralNetworkBackPropegation
             {
                 for (int j = 0; j < numHidden + 1; j++)
                 {
-                    hiddenOutputWeightMat[i][j] = rnd.NextDouble();
+                    hiddenOutputWeightMat[i][j] = RandomDouble(6);
                 }
             }
 
             this.SetWeights(inputHiddenWeightMat, hiddenOutputWeightMat);   // set weights on network
         }
+
+        #endregion
+
+        #region Random Number
+
+        private double RandomDouble(int precision)
+        {
+            double random = rnd.NextDouble();
+            return Math.Round(random, precision);
+        } 
 
         #endregion
 
