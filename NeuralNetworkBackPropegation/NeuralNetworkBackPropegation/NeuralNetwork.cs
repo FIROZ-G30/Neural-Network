@@ -8,6 +8,8 @@ namespace NeuralNetworkBackPropegation
 {
     class NeuralNetwork
     {
+        #region Private Variables
+
         private int numInput; // number input nodes
         private int numHidden;
         private int numOutput;
@@ -22,6 +24,11 @@ namespace NeuralNetworkBackPropegation
         private double[] outputs;   // output vector
 
         private Random rnd;
+
+        #endregion
+
+
+        #region Constructor
 
         public NeuralNetwork(int numInput, int numHidden, int numOutput)
         {
@@ -53,7 +60,11 @@ namespace NeuralNetworkBackPropegation
             this.rnd = new Random(0);
             this.InitializeWeights(); // all weights and biases
 
-        } // ctor
+        }
+
+        #endregion
+
+        #region Initialize Weights
 
         private void InitializeWeights()
         {
@@ -95,6 +106,9 @@ namespace NeuralNetworkBackPropegation
             this.SetWeights(inputHiddenWeightMat, hiddenOutputWeightMat);   // set weights on network
         }
 
+        #endregion
+
+        #region Set Weights
 
         public void SetWeights(double[][] inputHiddenWeightMat, double[][] hiddenOutputWeightMat)
         {
@@ -126,6 +140,10 @@ namespace NeuralNetworkBackPropegation
             }
         }
 
+        #endregion
+
+        #region Get Current Wegiht Matrix
+
         public double[][] GetWeightMatrix(WeightMatrix type)
         {
             if (type == WeightMatrix.InputHidden)
@@ -142,7 +160,7 @@ namespace NeuralNetworkBackPropegation
 
                     for (int j = 1; j < numInput + 1; j++)
                     {
-                         inputHiddenWeightMat[i][j] = inputHiddenWeights[i][j - 1];  // seperate input-hidden weight matrix
+                        inputHiddenWeightMat[i][j] = inputHiddenWeights[i][j - 1];  // seperate input-hidden weight matrix
                     }
                 }
 
@@ -162,7 +180,7 @@ namespace NeuralNetworkBackPropegation
 
                     for (int j = 1; j < numHidden + 1; j++)
                     {
-                         hiddenOutputWeightMat[i][j] = hiddenOutputWeights[i][j - 1];    // seperate hidden-output weight matrix
+                        hiddenOutputWeightMat[i][j] = hiddenOutputWeights[i][j - 1];    // seperate hidden-output weight matrix
                     }
                 }
 
@@ -177,5 +195,42 @@ namespace NeuralNetworkBackPropegation
                 return emptymatrix;
             }
         }
+
+        #endregion
+
+        #region Sigmoid Function
+
+        private static double Sigmoid(double x)
+        {
+            return 1 / (1 + Math.Exp(-x));
+        }
+
+        #endregion
+
+        #region Derivative Sigmoid
+
+        private static double DerivativeSigmoid(double output)
+        {
+            return (1 - output) * output;
+        }
+
+        #endregion
+
+        #region SoftMax Function
+
+        private static double[] Softmax(double[] output)
+        {
+            double sum = 0.0;
+            for (int i = 0; i < output.Length; ++i)
+                sum += Math.Exp(output[i]);
+
+            double[] result = new double[output.Length];
+            for (int i = 0; i < output.Length; ++i)
+                result[i] = Math.Exp(output[i]) / sum;
+
+            return result; // now scaled so that xi sum to 1.0
+        }
+
+        #endregion
     }
 }
