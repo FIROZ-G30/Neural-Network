@@ -10,6 +10,24 @@ namespace NeuralNetworkBackPropegation
 {
     public class MNISTData
     {
+        #region Properties
+
+        private int numRows = 0;
+
+        public int NumRows
+        {
+            get { return numRows; }
+        }
+
+        private int numColumn = 0;
+
+        public int NumColumn
+        {
+            get { return numColumn; }
+        }
+
+        #endregion
+
         #region Data Read Helper
 
         public double[][] ReadData(string path)
@@ -17,7 +35,6 @@ namespace NeuralNetworkBackPropegation
             List<List<double>> matrix = new List<List<double>>();
             double[][] dataMatrix;
             double[] dataVector;
-            int row = 0, column = 0;
             bool isInitalized = false;
 
             using (TextFieldParser parser = new TextFieldParser(path))
@@ -30,20 +47,20 @@ namespace NeuralNetworkBackPropegation
                     string[] fields = parser.ReadFields();
                     dataVector = Array.ConvertAll(fields, double.Parse);
                     matrix.Add(dataVector.ToList());
-                    row++;
+                    numRows++;
                     if (!isInitalized)
                     {
-                        column = fields.Length;
+                        numColumn = fields.Length;
                         isInitalized = true;
                     }
                 }
             }
 
-            dataMatrix = new double[row][];
+            dataMatrix = new double[numRows][];
 
-            for (int i = 0; i < row; i++)
+            for (int i = 0; i < numRows; i++)
             {
-                dataMatrix[i] = new double[column];
+                dataMatrix[i] = new double[numColumn];
                 dataMatrix[i] = matrix[i].ToArray();
             }
 
