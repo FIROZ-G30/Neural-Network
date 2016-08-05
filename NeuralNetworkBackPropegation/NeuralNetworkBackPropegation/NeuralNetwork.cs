@@ -133,13 +133,13 @@ namespace NeuralNetworkBackPropegation
         {
             if (type == WeightMatrix.InputHidden)
             {
-                double[][] inputHiddenWeightMat = InitializeMatrix(numHidden, numOutput + 1);
+                double[][] inputHiddenWeightMat = InitializeMatrix(numHidden, numInput + 1);
  
                 for (int i = 0; i < numHidden; i++)
                 {
                     inputHiddenWeightMat[i][0] = hiddenBiases[i]; // seperate hidden bias vector
 
-                    for (int j = 1; j < numInput + 1; j++)
+                    for (int j = 1; j < numInput; j++)
                     {
                         inputHiddenWeightMat[i][j] = inputHiddenWeights[i][j - 1];  // seperate input-hidden weight matrix
                     }
@@ -155,7 +155,7 @@ namespace NeuralNetworkBackPropegation
                 {
                     hiddenOutputWeightMat[i][0] = outputBiases[i];  // seperate output bias vector
 
-                    for (int j = 1; j < numHidden + 1; j++)
+                    for (int j = 1; j < numHidden; j++)
                     {
                         hiddenOutputWeightMat[i][j] = hiddenOutputWeights[i][j - 1];    // seperate hidden-output weight matrix
                     }
@@ -245,24 +245,19 @@ namespace NeuralNetworkBackPropegation
 
         #region Mean Squared Error
 
-        public double MeanSquaredError(double[][] trainingData)
+        public double MeanSquaredError(double[][] trainingData, double[][] desiredOutputMat)
         {
             // average squared error per training item
             double sumSquaredError = 0.0;
-            double[] input = new double[numInput]; // first numInput values in trainData
-            double[] desiredOutput = new double[numOutput]; // last numOutput values
             double[] actualOutput;
 
             for (int i = 0; i < trainingData.Length; i++)
             {
-                Array.Copy(trainingData[i], input, numInput);   // get input values
-                Array.Copy(trainingData[i], numInput, desiredOutput, 0, numOutput); // get target values
-
-                actualOutput = ComputeOutput(input);   // get output for current weight matrix
+                actualOutput = ComputeOutput(trainingData[i]);   // get output for current weight matrix
 
                 for (int j = 0; j < numOutput; j++)
                 {
-                    double error = desiredOutput[j] - actualOutput[j];
+                    double error = desiredOutputMat[i][j] - actualOutput[j];
                     sumSquaredError += error * error;
                 }
             }
@@ -274,25 +269,20 @@ namespace NeuralNetworkBackPropegation
 
         #region Get Accuracy
 
-        public double Accuracy(double[][] testData)
+        public double Accuracy(double[][] testData, double[][] desiredOutputMat)
         {
             int correctTestCases = 0;
             int incorrectTestCases = 0;
             int desiredIndex = 0;
             int actualIndex = 0;
 
-            double[] input = new double[numInput]; // first numInput values in trainData
-            double[] desiredOutput = new double[numOutput]; // last numOutput values
             double[] actualOutput;
 
             for (int i = 0; i < testData.Length; i++)
             {
-                Array.Copy(testData[i], input, numInput);   // get input values
-                Array.Copy(testData[i], numInput, desiredOutput, 0, numOutput); // get target values
+                actualOutput = ComputeOutput(testData[i]);   // get output for current weight matrix
 
-                actualOutput = ComputeOutput(input);   // get output for current weight matrix
-
-                desiredIndex = MaxIndex(desiredOutput);
+                desiredIndex = MaxIndex(desiredOutputMat[i]);
                 actualIndex = MaxIndex(actualOutput);
 
                 if (desiredIndex == actualIndex)

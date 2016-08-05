@@ -10,24 +10,6 @@ namespace NeuralNetworkBackPropegation
 {
     public class MNISTData
     {
-        #region Properties
-
-        private int numRows = 0;
-
-        public int NumRows
-        {
-            get { return numRows; }
-        }
-
-        private int numColumn = 0;
-
-        public int NumColumn
-        {
-            get { return numColumn; }
-        }
-
-        #endregion
-
         #region Data Read Helper
 
         public double[][] ReadData(string path)
@@ -36,7 +18,8 @@ namespace NeuralNetworkBackPropegation
             double[][] dataMatrix;
             double[] dataVector;
             bool isInitalized = false;
-
+            int numColumn = 0;
+            int numRows = 0;
             using (TextFieldParser parser = new TextFieldParser(path))
             {
                 parser.TextFieldType = FieldType.Delimited;
@@ -68,5 +51,30 @@ namespace NeuralNetworkBackPropegation
         } 
 
         #endregion
+
+        public void WriteWeightMtarix(double[][] weightMat, string weightFilePath)
+        {
+            StreamWriter writer = new StreamWriter(weightFilePath, false);
+
+            for (int i=0;i<weightMat.Length;i++)
+            {
+                writer.WriteLine(string.Join(",", weightMat[i]));
+            }
+
+            writer.Flush();
+            writer.Close();
+
+        }
+
+        public void WriteErrorVector(double[] errorVector, string errorFilePath, string nots)
+        {
+            StreamWriter writer = new StreamWriter(errorFilePath, true);
+
+            writer.Write(string.Join(",", errorVector));
+            writer.WriteLine(nots);
+
+            writer.Flush();
+            writer.Close();
+        }
     }
 }
