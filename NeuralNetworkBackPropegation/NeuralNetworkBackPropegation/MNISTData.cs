@@ -66,12 +66,11 @@ namespace NeuralNetworkBackPropegation
 
         }
 
-        public void WriteErrorVector(double[] errorVector, string errorFilePath, string nots)
+        public void WriteErrorVector(double[] errorVector, string errorFilePath)
         {
             StreamWriter writer = new StreamWriter(errorFilePath, true);
 
-            writer.Write(string.Join(",", errorVector));
-            writer.WriteLine(nots);
+            writer.WriteLine(string.Join(",", errorVector));
 
             writer.Flush();
             writer.Close();
