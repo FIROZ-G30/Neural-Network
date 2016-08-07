@@ -38,8 +38,8 @@ namespace NeuralNetworkBackPropegation
             hiddenBiases = new double[numHidden];
             outputBiases = new double[numOutput];
 
-            inputHiddenWeights = InitializeMatrix(numHidden,numInput);
- 
+            inputHiddenWeights = InitializeMatrix(numHidden, numInput);
+
             hiddenOutputWeights = InitializeMatrix(numOutput, numHidden);
 
             rnd = new Random(0);
@@ -57,7 +57,7 @@ namespace NeuralNetworkBackPropegation
             // in this input-hidden and hidden-output weightmatrises
             // the 0th column seperated to bias weight vector for hidden and output layer respectivly 
 
-            double[][] inputHiddenWeightMat = InitializeMatrix(numHidden,numInput + 1);// numinput + bias
+            double[][] inputHiddenWeightMat = InitializeMatrix(numHidden, numInput + 1);// numinput + bias
 
             double[][] hiddenOutputWeightMat = InitializeMatrix(numOutput, numHidden + 1);// numhidden + bias  
 
@@ -66,7 +66,7 @@ namespace NeuralNetworkBackPropegation
             {
                 for (int j = 0; j < numInput + 1; j++)
                 {
-                    inputHiddenWeightMat[i][j] = RandomDouble(6);
+                    inputHiddenWeightMat[i][j] = rnd.NextDouble();
                 }
             }
 
@@ -74,7 +74,7 @@ namespace NeuralNetworkBackPropegation
             {
                 for (int j = 0; j < numHidden + 1; j++)
                 {
-                    hiddenOutputWeightMat[i][j] = RandomDouble(6);
+                    hiddenOutputWeightMat[i][j] = rnd.NextDouble();
                 }
             }
 
@@ -89,7 +89,7 @@ namespace NeuralNetworkBackPropegation
         {
             double random = rnd.NextDouble();
             return Math.Round(random, precision);
-        } 
+        }
 
         #endregion
 
@@ -134,12 +134,12 @@ namespace NeuralNetworkBackPropegation
             if (type == WeightMatrix.InputHidden)
             {
                 double[][] inputHiddenWeightMat = InitializeMatrix(numHidden, numInput + 1);
- 
+
                 for (int i = 0; i < numHidden; i++)
                 {
                     inputHiddenWeightMat[i][0] = hiddenBiases[i]; // seperate hidden bias vector
 
-                    for (int j = 1; j < numInput; j++)
+                    for (int j = 1; j < numInput + 1; j++)
                     {
                         inputHiddenWeightMat[i][j] = inputHiddenWeights[i][j - 1];  // seperate input-hidden weight matrix
                     }
@@ -155,7 +155,7 @@ namespace NeuralNetworkBackPropegation
                 {
                     hiddenOutputWeightMat[i][0] = outputBiases[i];  // seperate output bias vector
 
-                    for (int j = 1; j < numHidden; j++)
+                    for (int j = 1; j < numHidden + 1; j++)
                     {
                         hiddenOutputWeightMat[i][j] = hiddenOutputWeights[i][j - 1];    // seperate hidden-output weight matrix
                     }
